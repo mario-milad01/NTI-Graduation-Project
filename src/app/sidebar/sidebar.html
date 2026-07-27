@@ -1,0 +1,23 @@
+<aside class="sidebar">
+  <div class="profile">
+    <div class="avatar"></div>
+    <div>
+      <p class="name">{{ userName }}</p>
+      <p class="tier">{{ userTier }}</p>
+    </div>
+  </div>
+
+  <nav class="nav-list">
+    @for (item of navItems; track item.label) {
+      <a class="nav-item"
+         [class.active]="item.label === activeLabel"
+         (click)="selectItem(item.label)">
+        <span class="icon">{{ item.icon }}</span>
+        <span class="label">{{ item.label }}</span>
+        @if (item.badge) {
+          <span class="badge">{{ item.badge }}</span>
+        }
+      </a>
+    }
+  </nav>
+</aside>

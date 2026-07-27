@@ -1,0 +1,37 @@
+<div class="orders-card">
+  <div class="orders-header">
+    <h3>Recent Orders</h3>
+    <span class="see-all">See all activity</span>
+  </div>
+
+  <table class="orders-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Order ID</th>
+        <th>Status</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orders; track order.orderId) {
+        <tr>
+          <td class="product-cell">
+            <div class="thumb"></div>
+            <div>
+              <p class="product-name">{{ order.product }}</p>
+              <p class="product-variant">{{ order.variant }}</p>
+            </div>
+          </td>
+          <td>{{ order.orderId }}</td>
+          <td>
+            <span class="status-pill" [class.transit]="order.status === 'In Transit'">
+              {{ order.status }}
+            </span>
+          </td>
+          <td>{{ order.total }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
