@@ -1,0 +1,128 @@
+.main-home-content {
+    width: 90%;
+    margin: 3rem auto;
+    padding: 1rem;
+    text-align: center;
+}
+
+.catagory-list {
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    margin: 1rem auto;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+
+    p {
+        color: rgb(119, 119, 119);
+        font-size: 1.1rem;
+    }
+}
+
+.catagory-btn {
+    padding: 0.5rem 1.2rem;
+    border-radius: 1rem;
+    background-color: rgb(136, 138, 214);
+    color: white;
+    border-color: rgb(136, 138, 214);
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.active {
+    background-color: rgb(87, 90, 255);
+    border-color: rgb(87, 90, 255);
+
+}
+
+.products {
+    width: 90%;
+    padding: 1rem;
+    margin: 1rem auto;
+}
+
+.products-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3rem;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.footer {
+    width: 100%;
+    height: fit-content;
+    background-color: rgb(72, 93, 116);
+    margin-top: 3rem;
+    padding: 1rem;
+    border-top: 1px solid rgb(255, 255, 255);
+}
+
+.footer-content {
+    width: 80%;
+    margin: 1rem auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.shop-info {
+    width: 60%;
+    justify-self: center;
+    color: white;
+
+    h3 {
+        font-size: 2rem;
+        margin: 1rem 0;
+
+    }
+
+    p {
+        font-size: 1.2rem;
+    }
+}
+
+.copyright-text {
+    width: 50%;
+    margin: 1rem auto;
+    padding: 2rem 0 0 0;
+    border-top: 1px solid rgba(134, 134, 134, 0.603);
+    text-align: center;
+    font-size: 1.1rem;
+    color: rgb(184, 183, 183);
+}
+
+.shop-contact-info {
+    width: 100%;
+    text-align: center;
+    font-size: 1.3rem;
+    color: white;
+
+    h3 {
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+}
+
+.contact-icons {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+
+    li {
+        cursor: pointer;
+        padding: 1rem;
+    }
+
+    svg {
+        font-size: 1.5rem;
+    }   
+}
