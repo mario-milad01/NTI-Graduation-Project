@@ -9,9 +9,14 @@
 
   <nav class="nav-list">
     @for (item of navItems; track item.label) {
-      <a class="nav-item"
-         [class.active]="item.label === activeLabel"
-         (click)="selectItem(item.label)">
+      <a
+        class="nav-item"
+        [routerLink]="item.route ?? null"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.route === '/profile' }"
+        [class.active]="!item.route && item.label === activeLabel"
+        (click)="!item.route && selectItem(item.label)"
+      >
         <span class="icon">{{ item.icon }}</span>
         <span class="label">{{ item.label }}</span>
         @if (item.badge) {

@@ -2,16 +2,6 @@
   <app-sidebar></app-sidebar>
 
   <main class="main-content">
-    <h1>Welcome back, Alex</h1>
-    <p class="subtitle">Here's what's happening with your account today.</p>
-
-    <div class="stats-grid">
-      <app-stat-card label="ORDERS" value="12" linkText="Active"></app-stat-card>
-      <app-stat-card label="WISHLIST" value="48" linkText="View all"></app-stat-card>
-      <app-stat-card label="POINTS" value="2,450" linkText="Silver tier" linkColor="gold"></app-stat-card>
-      <app-stat-card label="SAVINGS" value="$340" linkText="This year"></app-stat-card>
-    </div>
-
-    <app-recent-orders></app-recent-orders>
+    <router-outlet></router-outlet>
   </main>
 </div>
