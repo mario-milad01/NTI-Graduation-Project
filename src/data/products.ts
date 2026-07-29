@@ -88,7 +88,7 @@ export const PRODUCTS: Product[] = [
     name: "Ergonomic Leather Desk Chair",
     category: "Furniture",
     price: 249.99,
-    imageUrl: "https://unsplash.com/photos/a-white-chair-with-a-pillow-on-top-of-it-dzhs5iTQW28",
+    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQi-fU9RVAfQj_sxwNatrLVlm1GHzyonKhXMUXdDtofWQ&s=10",
     description: "High-back executive chair with adjustable lumbar support, pneumatic seat height adjustment, and breathable bonded leather.",
     sellerRating: 4.2,
     colors: ["Cognac Brown", "Midnight Black"]
