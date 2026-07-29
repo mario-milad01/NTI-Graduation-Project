@@ -41,26 +41,7 @@
 
       <hr class="divider" />
       
-<!-- removed color choices -->
-      <!-- Color Selection 
-      @if (product.colors && product.colors.length > 0) {
-        <div class="option-group">
-          <label class="option-label">
-            COLOR: <span class="selected-value">{{ selectedColor }}</span>
-          </label>
-          <div class="color-options">
-            @for (color of product.colors; track color) {
-              <button 
-                type="button"
-                class="color-chip" 
-                [class.active]="selectedColor === color"
-                (click)="selectColor(color)">
-                {{ color }}
-              </button>
-            }
-          </div>
-        </div>
-      } -->
+
 
       
       @if (product.sizes && product.sizes.length > 0) {

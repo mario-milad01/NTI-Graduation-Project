@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 
-// import {UpperCasePipe} from '@angular/common';
+
 @Component({
   selector: 'app-product-details-page',
   standalone: true,
@@ -28,7 +28,7 @@ export class ProductDetailsPage implements OnInit {
     this.product = foundProduct || PRODUCTS[0];
 
     this.selectedImage = this.product.imageUrl;
-    this.selectedColor = this.product.colors ? this.product.colors[0] : null;
+    
     this.selectedSize = this.product.sizes ? this.product.sizes[0] : null;
   }
 
