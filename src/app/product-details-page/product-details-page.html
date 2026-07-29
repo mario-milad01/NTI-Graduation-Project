@@ -1,0 +1,84 @@
+<div class="container">
+  <nav class="breadcrumbs">
+    <a routerLink="/" >HOME</a>
+    <span class="separator">></span>
+  
+  {{ product.category | uppercase }}
+  
+    <span class="separator">></span>
+    <span class="current">{{ product.name | uppercase }}</span>
+  </nav>
+
+  
+  <div class="product-grid">
+    
+    
+    <div class="gallery-container">
+      <div class="main-image">
+        <img [src]="selectedImage" [alt]="product.name" />
+      </div>
+    </div>
+
+    
+    <div class="details-container">
+      <span class="tag">{{ product.category }}</span>
+      <h1 class="title">{{ product.name }}</h1>
+
+      
+      @if (product.sellerRating) {
+        <div class="rating">
+          <span class="stars">★★★★★</span>
+          <span class="review-count">({{ product.sellerRating }} Rating)</span>
+        </div>
+      }
+
+     
+      <div class="price-section">
+        <span class="current-price">${{ product.price.toFixed(2) }}</span>
+      </div>
+
+      <p class="description">{{ product.description }}</p>
+
+      <hr class="divider" />
+      
+
+
+      
+      @if (product.sizes && product.sizes.length > 0) {
+        <div class="option-group">
+          <div class="size-header">
+            <label class="option-label">SIZE</label>
+            <a href="#" class="size-guide">SIZE GUIDE</a>
+          </div>
+          <div class="size-options">
+            @for (size of product.sizes; track size) {
+              <button 
+                type="button"
+                class="size-btn" 
+                [class.active]="selectedSize === size"
+                (click)="selectSize(size)">
+                {{ size }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      
+      <div class="option-group">
+        <label class="option-label">QUANTITY</label>
+        <div class="quantity-selector">
+          <button type="button" class="qty-btn" (click)="decreaseQuantity()">-</button>
+          <span class="qty-value">{{ quantity }}</span>
+          <button type="button" class="qty-btn" (click)="increaseQuantity()">+</button>
+        </div>
+      </div>
+
+      
+      <button type="button" class="add-to-cart-btn" (click)="addToCart()">
+        <span class="icon">🛍️</span> ADD TO CART
+      </button>
+
+    </div>
+  </div>
+</div>

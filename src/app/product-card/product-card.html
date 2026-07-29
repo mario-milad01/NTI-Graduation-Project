@@ -1,8 +1,8 @@
-<li class="product-card">
-    <section class="product-image">
+<li class="product-card" >
+    <section class="product-image" [routerLink]="['/product', productData.id]">
         <img src={{productData.imageUrl}} alt="product image">
     </section>
-    <section class="product-card-details">
+    <section class="product-card-details" >
         <article>
             <h3>{{productData.name}}</h3>
             <p class="product-description">
@@ -14,7 +14,7 @@
                     {{productData.price}} $
                 </p>
                 <p>
-                    <button class="view-btn">View details
+                    <button class="view-btn" [routerLink]="['/product', productData.id]">View details
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"

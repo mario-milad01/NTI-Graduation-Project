@@ -1,17 +1,11 @@
 import { Component, Input } from '@angular/core';
-
+import { Router, RouterLink } from '@angular/router';
 @Component({
   selector: 'app-product-card',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './product-card.html',
   styleUrl: './product-card.css',
 })
 export class ProductCard {
-  @Input () productData !:{
-    id:string;
-    description:string;
-    name:string;
-    imageUrl:string;
-    price:number;
-  } ;
-}
+  @Input () productData : any;
+} 
