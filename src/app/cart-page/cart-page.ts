@@ -1,63 +1,40 @@
-import { Component } from '@angular/core';
-
-interface CartItem {
-  id: number;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-}
+import { Component, inject } from '@angular/core';
+import { CartService } from './cart.service';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-cart-page',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterLink],
   templateUrl: './cart-page.html',
   styleUrls: ['./cart-page.css'],
 })
 export class CartPageComponent {
-  cartItems: CartItem[] = [
-    {
-      id: 1,
-      name: 'Classic T-Shirt',
-      price: 24,
-      quantity: 1,
-      image:
-        'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80',
-    },
-    {
-      id: 2,
-      name: 'Wireless Headphones',
-      price: 89,
-      quantity: 1,
-      image:
-        'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80',
-    },
-  ];
+  private readonly cartService = inject(CartService);
+  readonly cartItems = this.cartService.items;
 
   get subtotal(): number {
-    return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    return this.cartService.subtotal;
   }
 
   get shipping(): number {
-    return this.cartItems.length > 0 ? 5 : 0;
+    return this.cartService.shipping;
   }
 
   get total(): number {
-    return this.subtotal + this.shipping;
+    return this.cartService.total;
   }
 
-  increaseQuantity(item: CartItem): void {
-    item.quantity += 1;
+  increaseQuantity(itemKey: string): void {
+    this.cartService.increaseQuantity(itemKey);
   }
 
-  decreaseQuantity(item: CartItem): void {
-    if (item.quantity > 1) {
-      item.quantity -= 1;
-    }
+  decreaseQuantity(itemKey: string): void {
+    this.cartService.decreaseQuantity(itemKey);
   }
 
-  removeItem(itemId: number): void {
-    this.cartItems = this.cartItems.filter((item) => item.id !== itemId);
+  removeItem(itemKey: string): void {
+    this.cartService.removeItem(itemKey);
   }
 }

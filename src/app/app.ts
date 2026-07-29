@@ -6,15 +6,14 @@
 //   standalone: true,
 //   imports: [ProductDetailsPage],
 // =======
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { HomePage } from "./home-page/home-page";
-import { Navbar } from "./navbar/navbar.component";
+import { Navbar } from './navbar/navbar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HomePage, Navbar],
+  imports: [RouterOutlet, Navbar],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
 export class AppComponent {}

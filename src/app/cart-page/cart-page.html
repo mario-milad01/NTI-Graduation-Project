@@ -1,30 +1,42 @@
 <section class="cart-page">
   <div class="cart-header">
     <h1>Your Cart</h1>
-    <button class="keep-shopping-btn" type="button">Keep shopping</button>
+    <a class="keep-shopping-btn" routerLink="/home">Keep shopping</a>
   </div>
-  @if (cartItems.length) {
+  @if (cartItems().length) {
     <div class="cart-layout">
       <div class="items-panel">
-        @for (item of cartItems; track item.id) {
+        @for (item of cartItems(); track item.key) {
           <article class="cart-item">
             <div class="item-info">
-              <img class="item-image" [src]="item.image" [alt]="item.name" />
+              <img class="item-image" [src]="item.image" />
               <div>
                 <h2>{{ item.name }}</h2>
                 <p>${{ item.price }} each</p>
+                @if (item.color || item.size) {
+                  <p class="item-meta">
+                    @if (item.color) {
+                      <span>Color: {{ item.color }}</span>
+                    }
+                    @if (item.size) {
+                      <span>Size: {{ item.size }}</span>
+                    }
+                  </p>
+                }
               </div>
             </div>
 
             <div class="quantity-controls">
-              <button type="button" (click)="decreaseQuantity(item)">-</button>
+              <button type="button" (click)="decreaseQuantity(item.key)">-</button>
               <span>{{ item.quantity }}</span>
-              <button type="button" (click)="increaseQuantity(item)">+</button>
+              <button type="button" (click)="increaseQuantity(item.key)">+</button>
             </div>
 
             <div class="item-actions">
               <strong>${{ item.price * item.quantity }}</strong>
-              <button type="button" class="remove-btn" (click)="removeItem(item.id)">Remove</button>
+              <button type="button" class="remove-btn" (click)="removeItem(item.key)">
+                Remove
+              </button>
             </div>
           </article>
         }
