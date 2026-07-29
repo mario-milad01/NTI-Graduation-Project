@@ -25,6 +25,7 @@
     align-self: center;
     color: #111827;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 .nav-box {

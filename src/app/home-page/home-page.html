@@ -1,5 +1,5 @@
 <app-hero></app-hero>
-<div class="main-home-content">
+<div class="main-home-content" id="products-section">
     <div class="catagory-nav">
         <ul class="catagory-list">
             <p>
@@ -30,7 +30,7 @@
 
         </ul>
     </div>
-    <div class="products">
+    <div class="products" >
         <ul class="products-list">
             @for(product of filteredProducts; track product.id){
             <app-product-card [productData]="product"></app-product-card>
