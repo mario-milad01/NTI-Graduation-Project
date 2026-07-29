@@ -3,83 +3,96 @@
   <nav class="breadcrumbs">
     <a href="#">HOME</a>
     <span class="separator">></span>
-    <a href="#">SHOP ALL</a>
+    <a href="#">{{ product.category | uppercase }}</a>
     <span class="separator">></span>
-    <span class="current">LUXE CORE JACKET</span>
+    <span class="current">{{ product.name | uppercase }}</span>
   </nav>
 
   <!-- Product Main Layout -->
   <div class="product-grid">
     
-    <!-- Left Column: Gallery -->
+    <!-- Left Column: Image Gallery -->
     <div class="gallery-container">
-      <div class="thumbnail-list">
-        <img src="https://via.placeholder.com/100" class="thumb active" alt="Thumb 1" />
-        <img src="https://via.placeholder.com/100" class="thumb" alt="Thumb 2" />
-        <img src="https://via.placeholder.com/100" class="thumb" alt="Thumb 3" />
-        <img src="https://via.placeholder.com/100" class="thumb" alt="Thumb 4" />
-      </div>
       <div class="main-image">
-        <img src="https://via.placeholder.com/600x700" alt="Luxe Core Jacket" />
+        <img [src]="selectedImage" [alt]="product.name" />
       </div>
     </div>
 
-    <!-- Right Column: Product Info -->
+    <!-- Right Column: Product Details & Controls -->
     <div class="details-container">
-      <span class="tag">PREMIUM COLLECTION</span>
-      <h1 class="title">Luxe Core Jacket</h1>
+      <span class="tag">{{ product.category }}</span>
+      <h1 class="title">{{ product.name }}</h1>
 
-      <!-- Rating -->
-      <div class="rating">
-        <span class="stars">★★★★★</span>
-        <span class="review-count">(128 Reviews)</span>
-      </div>
+      <!-- Rating (if available) -->
+      @if (product.sellerRating) {
+        <div class="rating">
+          <span class="stars">★★★★★</span>
+          <span class="review-count">({{ product.sellerRating }} Rating)</span>
+        </div>
+      }
 
       <!-- Price Section -->
       <div class="price-section">
-        <span class="current-price">$295.00</span>
-        <span class="old-price">$350.00</span>
-        <span class="badge">15% OFF</span>
+        <span class="current-price">${{ product.price.toFixed(2) }}</span>
       </div>
+
+      <p class="description">{{ product.description }}</p>
 
       <hr class="divider" />
 
-      <!-- Color Selection -->
-      <div class="option-group">
-        <label class="option-label">COLOR: <span class="selected-value">Midnight Navy</span></label>
-        <div class="color-options">
-          <button class="color-swatch active" style="background-color: #1b263b;"></button>
-          <button class="color-swatch" style="background-color: #415a77;"></button>
-          <button class="color-swatch" style="background-color: #2b2d42;"></button>
+      <!-- Color Selection (Renders only if colors exist)
+      @if (product.colors && product.colors.length > 0) {
+        <div class="option-group">
+          <label class="option-label">
+            COLOR: <span class="selected-value">{{ selectedColor }}</span>
+          </label>
+          <div class="color-options">
+            @for (color of product.colors; track color) {
+              <button 
+                type="button"
+                class="color-chip" 
+                [class.active]="selectedColor === color"
+                (click)="selectColor(color)">
+                {{ color }}
+              </button>
+            }
+          </div>
         </div>
-      </div>
+      } -->
 
-      <!-- Size Selection -->
-      <div class="option-group">
-        <div class="size-header">
-          <label class="option-label">SIZE</label>
-          <a href="#" class="size-guide">SIZE GUIDE</a>
+      <!-- Size Selection (Renders only if sizes exist) -->
+      @if (product.sizes && product.sizes.length > 0) {
+        <div class="option-group">
+          <div class="size-header">
+            <label class="option-label">SIZE</label>
+            <a href="#" class="size-guide">SIZE GUIDE</a>
+          </div>
+          <div class="size-options">
+            @for (size of product.sizes; track size) {
+              <button 
+                type="button"
+                class="size-btn" 
+                [class.active]="selectedSize === size"
+                (click)="selectSize(size)">
+                {{ size }}
+              </button>
+            }
+          </div>
         </div>
-        <div class="size-options">
-          <button class="size-btn">S</button>
-          <button class="size-btn active">M</button>
-          <button class="size-btn">L</button>
-          <button class="size-btn">XL</button>
-        </div>
-      </div>
+      }
 
       <!-- Quantity Selector -->
       <div class="option-group">
         <label class="option-label">QUANTITY</label>
         <div class="quantity-selector">
-          <button class="qty-btn">-</button>
-          <span class="qty-value">1</span>
-          <button class="qty-btn">+</button>
+          <button type="button" class="qty-btn" (click)="decreaseQuantity()">-</button>
+          <span class="qty-value">{{ quantity }}</span>
+          <button type="button" class="qty-btn" (click)="increaseQuantity()">+</button>
         </div>
       </div>
 
       <!-- Add to Cart Button -->
-      <button class="add-to-cart-btn">
+      <button type="button" class="add-to-cart-btn" (click)="addToCart()">
         <span class="icon">🛍️</span> ADD TO CART
       </button>
 
