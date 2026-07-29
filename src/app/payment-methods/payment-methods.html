@@ -5,13 +5,15 @@
   </div>
 
   <div class="methods-list">
-    @for (method of methods; track method.id) {
+    @for (method of methods(); track method.id) {
       <div class="method-card">
         <div class="method-info">
           <div class="brand-badge">{{ method.brand }}</div>
           <div>
             <p class="card-number">•••• •••• •••• {{ method.last4 }}</p>
-            <p class="card-meta">{{ method.cardholderName }} · Expires {{ method.expiryMonth }}/{{ method.expiryYear }}</p>
+            <p class="card-meta">
+              {{ method.cardholderName }} · Expires {{ method.expiryMonth }}/{{ method.expiryYear }}
+            </p>
           </div>
         </div>
         <div class="method-actions">
@@ -40,12 +42,23 @@
 
       <label>
         Cardholder name
-        <input type="text" name="cardholderName" [(ngModel)]="newCardholderName" placeholder="Alex Rivera" />
+        <input
+          type="text"
+          name="cardholderName"
+          [(ngModel)]="newCardholderName"
+          placeholder="Alex Rivera"
+        />
       </label>
 
       <label>
         Card number
-        <input type="text" name="cardNumber" [(ngModel)]="newCardNumber" placeholder="1234 5678 9012 3456" inputmode="numeric" />
+        <input
+          type="text"
+          name="cardNumber"
+          [(ngModel)]="newCardNumber"
+          placeholder="1234 5678 9012 3456"
+          inputmode="numeric"
+        />
       </label>
 
       <div class="form-row">
@@ -55,7 +68,13 @@
         </label>
         <label>
           CVV
-          <input type="text" name="cvv" [(ngModel)]="newCvv" placeholder="123" inputmode="numeric" />
+          <input
+            type="text"
+            name="cvv"
+            [(ngModel)]="newCvv"
+            placeholder="123"
+            inputmode="numeric"
+          />
         </label>
       </div>
 

@@ -6,18 +6,17 @@ import { ProfilePage } from './profile-page/profile-page';
 import { ProfileDashboard } from './profile-dashboard/profile-dashboard';
 import { PaymentMethods } from './payment-methods/payment-methods';
 
+
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  // {path:'login',component:LoginPage},
+  //{path:'login',component:LoginPage},
   // {path:'signup',component:SignupPage}
   { path: 'home', component: HomePage },
   // {path:'profile',component:ProfilePage},
   { path: 'cart', component: CartPageComponent },
   { path: 'product/:id', component: ProductDetailsPage },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
   // {path:'login',component:LoginPage},
   // {path:'signup',component:SignupPage}
-  { path: 'home', component: HomePage },
   {
     path: 'profile',
     component: ProfilePage,

@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ProfileService } from '../profile-page/profile.service';
 
 interface NavItem {
   label: string;
@@ -16,16 +17,14 @@ interface NavItem {
   styleUrl: './sidebar.css',
 })
 export class Sidebar {
-  userName = 'Alex Rivera';
-  userTier = 'Premium Member';
+  private readonly profileService = inject(ProfileService);
+  readonly user = this.profileService.user;
 
   navItems: NavItem[] = [
     { label: 'Profile', icon: '▦', route: '/profile' },
     { label: 'Orders', icon: '📦' },
-    { label: 'Wishlist', icon: '♡' },
     { label: 'Saved addresses', icon: '📍' },
     { label: 'Payment methods', icon: '💳', route: '/profile/payment-methods' },
-    { label: 'Settings', icon: '⚙' },
   ];
 
   activeLabel = 'Dashboard';
