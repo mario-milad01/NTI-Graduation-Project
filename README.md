@@ -1,59 +1,68 @@
-# ECommerceApp
+# Angular Components — Login, Signup, Cart, Checkout
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.19.
+Four standalone Angular components (Angular 17+/18 syntax: signals, the new
+`@if` / `@for` control-flow blocks, reactive forms). Drop the folders under
+`src/app/features/` in your project.
 
-## Development server
+## Structure
 
-To start a local development server, run:
-
-```bash
-ng serve
+```
+src/app/features/
+├── auth/
+│   ├── login/
+│   │   ├── login.component.ts
+│   │   ├── login.component.html
+│   │   └── login.component.css
+│   └── signup/
+│       ├── signup.component.ts
+│       ├── signup.component.html
+│       └── signup.component.css
+├── cart/
+│   ├── cart.component.ts
+│   ├── cart.component.html
+│   └── cart.component.css
+└── checkout/
+    ├── checkout.component.ts
+    ├── checkout.component.html
+    └── checkout.component.css
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Requirements
 
-## Code scaffolding
+- **Angular 17+** (standalone components, `@if`/`@for` control flow).
+  If your project is on an older Angular version, swap the `@if`/`@for`
+  blocks for `*ngIf`/`*ngFor` and add `NgIf`/`NgFor` to each component's
+  `imports` array instead.
+- **Tailwind CSS** configured in the project (all layout/spacing/color
+  utility classes are Tailwind). The rest (glass card backdrop blur, sky
+  gradient, cloud shapes, etc.) lives in each component's own `.css` file
+  since Tailwind alone can't express those effects.
+- **Angular Router**, for the `routerLink` navigation between login ↔ signup
+  and cart → checkout. See `app.routes.example.ts` for how to wire these up
+  — merge the relevant routes into your existing `app.routes.ts`.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## What's wired up vs. what's a placeholder
 
-```bash
-ng generate component component-name
-```
+**Working out of the box:**
+- Reactive form validation (login, signup, checkout contact/shipping)
+- Password visibility toggles
+- Live password-strength meter + confirm-password match check (signup)
+- Cart quantity +/-, remove, live subtotal/tax/total recalculation (signals + `computed()`)
+- Delivery method and payment method selection with live total updates (checkout)
+- Card number / expiry / CVV auto-formatting
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+**You'll need to connect:**
+- `onSubmit()` in login/signup — call your actual auth service instead of `console.log`
+- `applyPromoCode()` in cart/checkout — call your backend promo validation
+- `completePurchase()` in checkout — call your payment processing endpoint
+- Product data in cart/checkout is hardcoded as example state — replace with
+  data from your cart service / API
 
-```bash
-ng generate --help
-```
+## Notes
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Login and signup link to each other via `routerLink="/login"` /
+  `routerLink="/signup"` — update the paths if your routes differ.
+- Cart's "Checkout Now" and checkout header's "LUXE" logo link via
+  `routerLink="/checkout"` and `routerLink="/cart"` respectively.
+- Currency values use Angular's built-in `currency` pipe (defaults to USD —
+  pass a currency code if you need a different locale, e.g. `{{ total() | currency:'EGP' }}`).
