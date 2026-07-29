@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import  {Product , PRODUCTS} from "../../data/products";
+import { Component, OnInit, inject } from '@angular/core';
+import { Product, PRODUCTS } from '../../data/products';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-
-
+import { CartService } from '../cart-page/cart.service';
 
 @Component({
   selector: 'app-product-details-page',
@@ -12,7 +11,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
   templateUrl: './product-details-page.html',
   styleUrl: './product-details-page.css',
 })
-
 export class ProductDetailsPage implements OnInit {
   product!: Product;
   selectedImage: string = '';
@@ -20,15 +18,16 @@ export class ProductDetailsPage implements OnInit {
   selectedSize: string | null = null;
   quantity: number = 1;
 
-  constructor(private route: ActivatedRoute) {}
+  private readonly route = inject(ActivatedRoute);
+  private readonly cartService = inject(CartService);
 
   ngOnInit(): void {
     const productId = this.route.snapshot.paramMap.get('id');
-    const foundProduct = PRODUCTS.find(p => p.id === productId);
+    const foundProduct = PRODUCTS.find((p) => p.id === productId);
     this.product = foundProduct || PRODUCTS[0];
 
     this.selectedImage = this.product.imageUrl;
-    
+
     this.selectedSize = this.product.sizes ? this.product.sizes[0] : null;
   }
 
@@ -49,18 +48,7 @@ export class ProductDetailsPage implements OnInit {
   }
 
   addToCart(): void {
-    const itemToCart = {
-      id: this.product.id,
-      name: this.product.name,
-      price: this.product.price,
-      color: this.selectedColor,
-      size: this.selectedSize,
-      quantity: this.quantity,
-      image: this.selectedImage
-    };
-
-    console.log('Product added to cart:', itemToCart);
+    this.cartService.addItem(this.product, this.quantity, this.selectedColor, this.selectedSize);
     alert(`Added ${this.quantity}x ${this.product.name} to your cart`);
-  } 
+  }
 }
-
