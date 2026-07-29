@@ -1,29 +1,30 @@
 <div class="container">
-  <!-- Breadcrumbs -->
   <nav class="breadcrumbs">
-    <a href="#">HOME</a>
+    <a routerLink="/" >HOME</a>
     <span class="separator">></span>
-    <a href="#">{{ product.category | uppercase }}</a>
+  
+  {{ product.category | uppercase }}
+  
     <span class="separator">></span>
     <span class="current">{{ product.name | uppercase }}</span>
   </nav>
 
-  <!-- Product Main Layout -->
+  
   <div class="product-grid">
     
-    <!-- Left Column: Image Gallery -->
+    
     <div class="gallery-container">
       <div class="main-image">
         <img [src]="selectedImage" [alt]="product.name" />
       </div>
     </div>
 
-    <!-- Right Column: Product Details & Controls -->
+    
     <div class="details-container">
       <span class="tag">{{ product.category }}</span>
       <h1 class="title">{{ product.name }}</h1>
 
-      <!-- Rating (if available) -->
+      
       @if (product.sellerRating) {
         <div class="rating">
           <span class="stars">★★★★★</span>
@@ -31,7 +32,7 @@
         </div>
       }
 
-      <!-- Price Section -->
+     
       <div class="price-section">
         <span class="current-price">${{ product.price.toFixed(2) }}</span>
       </div>
@@ -39,8 +40,9 @@
       <p class="description">{{ product.description }}</p>
 
       <hr class="divider" />
-
-      <!-- Color Selection (Renders only if colors exist)
+      
+<!-- removed color choices -->
+      <!-- Color Selection 
       @if (product.colors && product.colors.length > 0) {
         <div class="option-group">
           <label class="option-label">
@@ -60,7 +62,7 @@
         </div>
       } -->
 
-      <!-- Size Selection (Renders only if sizes exist) -->
+      
       @if (product.sizes && product.sizes.length > 0) {
         <div class="option-group">
           <div class="size-header">
@@ -81,7 +83,7 @@
         </div>
       }
 
-      <!-- Quantity Selector -->
+      
       <div class="option-group">
         <label class="option-label">QUANTITY</label>
         <div class="quantity-selector">
@@ -91,7 +93,7 @@
         </div>
       </div>
 
-      <!-- Add to Cart Button -->
+      
       <button type="button" class="add-to-cart-btn" (click)="addToCart()">
         <span class="icon">🛍️</span> ADD TO CART
       </button>

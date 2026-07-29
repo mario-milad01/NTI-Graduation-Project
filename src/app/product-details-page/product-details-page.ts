@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import  {Product , PRODUCTS} from "../../data/products";
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+
+
 // import {UpperCasePipe} from '@angular/common';
 @Component({
   selector: 'app-product-details-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './product-details-page.html',
   styleUrl: './product-details-page.css',
 })
