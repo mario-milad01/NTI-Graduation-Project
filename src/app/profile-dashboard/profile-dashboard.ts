@@ -17,6 +17,7 @@ export class ProfileDashboard {
   readonly user = this.profileService.user;
   readonly orders = this.profileService.orders;
   readonly preferredPaymentMethod = this.profileService.preferredPaymentMethod;
+  readonly defaultAddress = this.profileService.defaultAddress;
 
   readonly orderCount = computed(() => this.orders().length);
 }

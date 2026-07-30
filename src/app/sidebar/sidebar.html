@@ -10,11 +10,9 @@
     @for (item of navItems; track item.label) {
       <a
         class="nav-item"
-        [routerLink]="item.route ?? null"
+        [routerLink]="item.route"
         routerLinkActive="active"
         [routerLinkActiveOptions]="{ exact: item.route === '/profile' }"
-        [class.active]="!item.route && item.label === activeLabel"
-        (click)="!item.route && selectItem(item.label)"
       >
         <span class="icon">{{ item.icon }}</span>
         <span class="label">{{ item.label }}</span>

@@ -10,7 +10,8 @@ h1 {
 
 .dashboard-cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 200px 1fr 1fr;
+  align-items: start;
   gap: 16px;
   margin-bottom: 24px;
 }
@@ -22,10 +23,22 @@ h1 {
 }
 
 .orders-summary-card {
+  display: block;
+  width: 200px;
+  height: 180px;
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  padding: 20px;
+  padding: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.orders-summary-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
 }
 .orders-summary-card .card-label {
   color: #6b7280;
@@ -37,7 +50,7 @@ h1 {
   margin-top: 10px;
 }
 .orders-count {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
 }
 .card-link {
@@ -54,6 +67,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  min-height: 168px;
 }
 .payment-summary-card .card-label {
   color: #9ca8c4;
@@ -63,7 +77,6 @@ h1 {
   justify-content: space-between;
   align-items: flex-start;
 }
-
 .card-dots-row {
   display: flex;
   gap: 10px;
@@ -105,7 +118,48 @@ h1 {
   border-radius: 6px;
 }
 
-.payment-summary-card.empty {
+.address-summary-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  min-height: 168px;
+  display: flex;
+  flex-direction: column;
+}
+.address-summary-card .card-label {
+  color: #6b7280;
+}
+.address-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.address-tag {
+  background: #eef2ff;
+  color: #4338ca;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.address-recipient {
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 14px;
+}
+.address-line {
+  color: #6b7280;
+  font-size: 13px;
+  margin-top: 2px;
+}
+.manage-link {
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.payment-summary-card.empty,
+.address-summary-card.empty {
   gap: 10px;
 }
 .empty-text {
@@ -113,14 +167,23 @@ h1 {
   font-size: 14px;
   margin-top: 8px;
 }
-.add-card-link {
+.address-summary-card.empty .empty-text {
+  color: #6b7280;
+}
+.add-link {
   color: #93c5fd;
   font-size: 13px;
   margin-top: 4px;
 }
+.address-summary-card.empty .add-link {
+  color: #2563eb;
+}
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .dashboard-cards {
     grid-template-columns: 1fr;
+  }
+  .orders-summary-card {
+    width: 100%;
   }
 }

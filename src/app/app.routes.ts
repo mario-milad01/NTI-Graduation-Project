@@ -5,7 +5,8 @@ import { CartPageComponent } from './cart-page/cart-page';
 import { ProfilePage } from './profile-page/profile-page';
 import { ProfileDashboard } from './profile-dashboard/profile-dashboard';
 import { PaymentMethods } from './payment-methods/payment-methods';
-
+import { OrdersPage } from './orders-page/orders-page';
+import { AddressesPage } from './addresses-page/addresses-page';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -22,8 +23,9 @@ export const routes: Routes = [
     component: ProfilePage,
     children: [
       { path: '', component: ProfileDashboard },
+      { path: 'orders', component: OrdersPage },
+      { path: 'addresses', component: AddressesPage },
       { path: 'payment-methods', component: PaymentMethods },
     ],
   },
-  // {path:'cart',component:CartPage},
 ];

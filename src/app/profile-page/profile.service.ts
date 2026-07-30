@@ -29,6 +29,32 @@ export interface NewPaymentMethodInput {
   cvv: string;
 }
 
+export interface Address {
+  id: string;
+  label: string;
+  recipientName: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phone?: string;
+  isDefault: boolean;
+}
+
+export interface NewAddressInput {
+  label: string;
+  recipientName: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phone?: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -39,9 +65,27 @@ export class ProfileService {
   readonly user = this.userSignal.asReadonly();
 
   private readonly ordersSignal = signal<Order[]>([
-    { product: 'Premium Leather Tote', variant: 'Black / Medium', orderId: '#LX-99201', status: 'In Transit', total: '$299.00' },
-    { product: 'Heritage Low-Top', variant: 'White / 42', orderId: '#LX-98443', status: 'Delivered', total: '$185.00' },
-    { product: 'Chronos Series 3', variant: 'Space Grey / 40mm', orderId: '#LX-97002', status: 'Delivered', total: '$450.00' },
+    {
+      product: 'Premium Leather Tote',
+      variant: 'Black / Medium',
+      orderId: '#LX-99201',
+      status: 'In Transit',
+      total: '$299.00',
+    },
+    {
+      product: 'Heritage Low-Top',
+      variant: 'White / 42',
+      orderId: '#LX-98443',
+      status: 'Delivered',
+      total: '$185.00',
+    },
+    {
+      product: 'Chronos Series 3',
+      variant: 'Space Grey / 40mm',
+      orderId: '#LX-97002',
+      status: 'Delivered',
+      total: '$450.00',
+    },
   ]);
   readonly orders = this.ordersSignal.asReadonly();
 
@@ -68,7 +112,10 @@ export class ProfileService {
   readonly paymentMethods = this.paymentMethodsSignal.asReadonly();
 
   readonly preferredPaymentMethod = computed(
-    () => this.paymentMethodsSignal().find((m) => m.isDefault) ?? this.paymentMethodsSignal()[0] ?? null,
+    () =>
+      this.paymentMethodsSignal().find((m) => m.isDefault) ??
+      this.paymentMethodsSignal()[0] ??
+      null,
   );
 
   setDefaultPaymentMethod(id: string): void {
@@ -126,5 +173,93 @@ export class ProfileService {
     if (digits.startsWith('34') || digits.startsWith('37')) return 'Amex';
     if (digits.startsWith('5')) return 'Mastercard';
     return 'Visa';
+  }
+
+  private readonly addressesSignal = signal<Address[]>([
+    {
+      id: 'addr-1',
+      label: 'Home',
+      recipientName: 'John Cena',
+      line1: '000 invis st',
+      city: 'Austin',
+      state: 'TX',
+      postalCode: '78701',
+      country: 'United States',
+      phone: '(512) 555-0148',
+      isDefault: true,
+    },
+    {
+      id: 'addr-2',
+      label: 'Work',
+      recipientName: 'John Cena',
+      line1: '1 Infinite Loop',
+      line2: 'Suite 300',
+      city: 'Austin',
+      state: 'TX',
+      postalCode: '78702',
+      country: 'United States',
+      isDefault: false,
+    },
+  ]);
+  readonly addresses = this.addressesSignal.asReadonly();
+
+  readonly defaultAddress = computed(
+    () => this.addressesSignal().find((a) => a.isDefault) ?? this.addressesSignal()[0] ?? null,
+  );
+
+  setDefaultAddress(id: string): void {
+    this.addressesSignal.set(this.addressesSignal().map((a) => ({ ...a, isDefault: a.id === id })));
+  }
+
+  removeAddress(id: string): void {
+    const wasDefault = this.addressesSignal().find((a) => a.id === id)?.isDefault;
+    const remaining = this.addressesSignal().filter((a) => a.id !== id);
+
+    if (wasDefault && remaining.length > 0) {
+      remaining[0] = { ...remaining[0], isDefault: true };
+    }
+
+    this.addressesSignal.set(remaining);
+  }
+
+  addAddress(input: NewAddressInput): string | null {
+    if (!input.recipientName.trim()) {
+      return 'Recipient name is required.';
+    }
+    if (!input.line1.trim()) {
+      return 'Address line 1 is required.';
+    }
+    if (!input.city.trim()) {
+      return 'City is required.';
+    }
+    if (!input.state.trim()) {
+      return 'State is required.';
+    }
+    if (!input.postalCode.trim()) {
+      return 'Postal code is required.';
+    }
+    if (!input.country.trim()) {
+      return 'Country is required.';
+    }
+
+    const current = this.addressesSignal();
+    this.addressesSignal.set([
+      ...current,
+      {
+        id: `addr-${Date.now()}`,
+        label: input.label.trim() || 'Address',
+        recipientName: input.recipientName.trim(),
+        line1: input.line1.trim(),
+        line2: input.line2?.trim() || undefined,
+        city: input.city.trim(),
+        state: input.state.trim(),
+        postalCode: input.postalCode.trim(),
+        country: input.country.trim(),
+        phone: input.phone?.trim() || undefined,
+        isDefault: current.length === 0,
+      },
+    ]);
+
+    return null;
   }
 }

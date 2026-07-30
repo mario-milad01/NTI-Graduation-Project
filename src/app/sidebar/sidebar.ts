@@ -6,7 +6,7 @@ interface NavItem {
   label: string;
   icon: string;
   badge?: number;
-  route?: string;
+  route: string;
 }
 
 @Component({
@@ -22,14 +22,8 @@ export class Sidebar {
 
   navItems: NavItem[] = [
     { label: 'Profile', icon: '▦', route: '/profile' },
-    { label: 'Orders', icon: '📦' },
-    { label: 'Saved addresses', icon: '📍' },
+    { label: 'Orders', icon: '📦', route: '/profile/orders' },
+    { label: 'Saved addresses', icon: '📍', route: '/profile/addresses' },
     { label: 'Payment methods', icon: '💳', route: '/profile/payment-methods' },
   ];
-
-  activeLabel = 'Dashboard';
-
-  selectItem(label: string) {
-    this.activeLabel = label;
-  }
 }

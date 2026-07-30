@@ -1,0 +1,123 @@
+<div class="addresses-page">
+  <div class="page-header">
+    <h1>Saved Addresses</h1>
+    <p class="subtitle">Manage the shipping addresses on your account.</p>
+  </div>
+
+  <div class="addresses-list">
+    @for (address of addresses(); track address.id) {
+      <div class="address-card">
+        <div class="address-info">
+          <div class="label-badge">{{ address.label }}</div>
+          <div>
+            <p class="recipient-name">{{ address.recipientName }}</p>
+            <p class="address-lines">
+              {{ address.line1 }}
+              @if (address.line2) {
+                , {{ address.line2 }}
+              }
+            </p>
+            <p class="address-lines">
+              {{ address.city }}, {{ address.state }} {{ address.postalCode }}
+            </p>
+            <p class="address-meta">
+              {{ address.country }}
+              @if (address.phone) {
+                · {{ address.phone }}
+              }
+            </p>
+          </div>
+        </div>
+        <div class="address-actions">
+          @if (address.isDefault) {
+            <span class="default-pill">Default</span>
+          } @else {
+            <button class="link-btn" (click)="setDefault(address.id)">Set as default</button>
+          }
+          <button class="link-btn remove" (click)="removeAddress(address.id)">Remove</button>
+        </div>
+      </div>
+    } @empty {
+      <p class="empty-state">You don't have any saved addresses yet.</p>
+    }
+  </div>
+
+  @if (!showAddForm) {
+    <button class="add-btn" (click)="toggleAddForm()">+ Add address</button>
+  } @else {
+    <form class="add-form" (ngSubmit)="addAddress()">
+      <h3>Add an address</h3>
+
+      @if (errorMessage) {
+        <p class="form-error">{{ errorMessage }}</p>
+      }
+
+      <label>
+        Label
+        <input type="text" name="label" [(ngModel)]="newLabel" placeholder="Home, Work, etc." />
+      </label>
+
+      <label>
+        Recipient name
+        <input
+          type="text"
+          name="recipientName"
+          [(ngModel)]="newRecipientName"
+          placeholder="James Bond"
+        />
+      </label>
+
+      <label>
+        Address line 1
+        <input
+          type="text"
+          name="line1"
+          [(ngModel)]="newLine1"
+          placeholder="123 Doom st"
+        />
+      </label>
+
+      <label>
+        Address line 2 <span class="optional">(optional)</span>
+        <input
+          type="text"
+          name="line2"
+          [(ngModel)]="newLine2"
+          placeholder="Apartment, suite, etc."
+        />
+      </label>
+
+      <div class="form-row">
+        <label>
+          City
+          <input type="text" name="city" [(ngModel)]="newCity" placeholder="Racoon" />
+        </label>
+        <label>
+          State
+          <input type="text" name="state" [(ngModel)]="newState" placeholder="Cairo" />
+        </label>
+      </div>
+
+      <div class="form-row">
+        <label>
+          Postal code
+          <input type="text" name="postalCode" [(ngModel)]="newPostalCode" placeholder="12345" />
+        </label>
+        <label>
+          Country
+          <input type="text" name="country" [(ngModel)]="newCountry" placeholder="Wakanda" />
+        </label>
+      </div>
+
+      <label>
+        Phone <span class="optional">(optional)</span>
+        <input type="text" name="phone" [(ngModel)]="newPhone" placeholder="010 1234 1234" />
+      </label>
+
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="toggleAddForm()">Cancel</button>
+        <button type="submit" class="save-btn">Save address</button>
+      </div>
+    </form>
+  }
+</div>

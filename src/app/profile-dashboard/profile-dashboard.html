@@ -2,13 +2,13 @@
 <p class="subtitle">Here's what's happening with your account today.</p>
 
 <div class="dashboard-cards">
-  <div class="orders-summary-card">
+  <a class="orders-summary-card" routerLink="/profile/orders">
     <span class="card-label">ORDERS</span>
     <div class="orders-summary-row">
       <span class="orders-count">{{ orderCount() }}</span>
-      <span class="card-link">Active</span>
+      <span class="card-link">View All</span>
     </div>
-  </div>
+  </a>
 
   @if (preferredPaymentMethod(); as method) {
     <div class="payment-summary-card">
@@ -18,13 +18,16 @@
 
       <div class="card-dots-row">
         <span class="dot-group">
-          <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span>
         </span>
         <span class="dot-group">
-          <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span>
         </span>
         <span class="dot-group">
-          <span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span
+          ><span class="dot"></span>
         </span>
       </div>
       <div class="card-number-row">{{ method.last4 }}</div>
@@ -42,6 +45,31 @@
       <span class="card-label">PREFERRED CARD</span>
       <p class="empty-text">No payment method on file yet.</p>
       <a class="add-card-link" routerLink="/profile/payment-methods">+ Add a card</a>
+    </div>
+  }
+
+  @if (defaultAddress(); as address) {
+    <div class="address-summary-card">
+      <div class="address-card-top">
+        <span class="card-label">DEFAULT ADDRESS</span>
+        <span class="address-tag">{{ address.label }}</span>
+      </div>
+
+      <p class="address-recipient">{{ address.recipientName }}</p>
+      <p class="address-line">
+        {{ address.line1 }}
+        @if (address.line2) {
+          , {{ address.line2 }}
+        }
+      </p>
+      <p class="address-line">{{ address.city }}, {{ address.state }} {{ address.postalCode }}</p>
+      <a class="card-link manage-link" routerLink="/profile/addresses">Manage addresses</a>
+    </div>
+  } @else {
+    <div class="address-summary-card empty">
+      <span class="card-label">DEFAULT ADDRESS</span>
+      <p class="empty-text">No saved address yet.</p>
+      <a class="add-link" routerLink="/profile/addresses">+ Add an address</a>
     </div>
   }
 </div>
