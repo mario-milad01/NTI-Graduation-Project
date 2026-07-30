@@ -1,7 +1,6 @@
 <div class="orders-card">
   <div class="orders-header">
     <h3>Recent Orders</h3>
-    <span class="see-all">See all activity</span>
   </div>
 
   <table class="orders-table">
@@ -14,7 +13,7 @@
       </tr>
     </thead>
     <tbody>
-      @for (order of orders; track order.orderId) {
+      @for (order of orders; track $index) {
         <tr>
           <td class="product-cell">
             <div class="thumb"></div>
@@ -30,6 +29,10 @@
             </span>
           </td>
           <td>{{ order.total }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="4" class="empty-cell">You haven't placed any orders yet.</td>
         </tr>
       }
     </tbody>

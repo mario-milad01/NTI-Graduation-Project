@@ -10,11 +10,6 @@
   align-items: center;
   margin-bottom: 12px;
 }
-.see-all {
-  color: #2563eb;
-  font-size: 13px;
-  cursor: pointer;
-}
 .orders-table {
   width: 100%;
   border-collapse: collapse;
@@ -30,6 +25,11 @@
   padding: 12px 8px;
   border-top: 1px solid #f1f5f9;
   font-size: 14px;
+}
+.empty-cell {
+  text-align: center;
+  color: #6b7280;
+  padding: 24px 8px;
 }
 .product-cell {
   display: flex;

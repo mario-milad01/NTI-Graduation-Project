@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { AuthService } from '../features/auth/auth.service';
 
 export interface ProfileUser {
   name: string;
@@ -55,60 +56,31 @@ export interface NewAddressInput {
   phone?: string;
 }
 
+const ORDERS_KEY = 'shoppy-profile-orders';
+const PAYMENT_METHODS_KEY = 'shoppy-profile-payment-methods';
+const ADDRESSES_KEY = 'shoppy-profile-addresses';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private readonly userSignal = signal<ProfileUser>({
-    name: 'John Cena',
-  });
-  readonly user = this.userSignal.asReadonly();
+  private readonly authService = inject(AuthService);
 
-  private readonly ordersSignal = signal<Order[]>([
-    {
-      product: 'Premium Leather Tote',
-      variant: 'Black / Medium',
-      orderId: '#LX-99201',
-      status: 'In Transit',
-      total: '$299.00',
-    },
-    {
-      product: 'Heritage Low-Top',
-      variant: 'White / 42',
-      orderId: '#LX-98443',
-      status: 'Delivered',
-      total: '$185.00',
-    },
-    {
-      product: 'Chronos Series 3',
-      variant: 'Space Grey / 40mm',
-      orderId: '#LX-97002',
-      status: 'Delivered',
-      total: '$450.00',
-    },
-  ]);
+  readonly user = computed<ProfileUser>(() => {
+    const authUser = this.authService.currentUser();
+    return { name: authUser?.fullName ?? 'Guest' };
+  });
+
+  private readonly ordersSignal = signal<Order[]>(this.loadPersisted<Order>(ORDERS_KEY));
   readonly orders = this.ordersSignal.asReadonly();
 
-  private readonly paymentMethodsSignal = signal<PaymentMethod[]>([
-    {
-      id: 'pm-1',
-      brand: 'Visa',
-      last4: '4242',
-      expiryMonth: '08',
-      expiryYear: '27',
-      cardholderName: 'John CantSeeMe Cena',
-      isDefault: true,
-    },
-    {
-      id: 'pm-2',
-      brand: 'Mastercard',
-      last4: '8390',
-      expiryMonth: '11',
-      expiryYear: '26',
-      cardholderName: 'John CantSeeMe Cena',
-      isDefault: false,
-    },
-  ]);
+  addOrders(newOrders: Order[]): void {
+    this.ordersSignal.set([...newOrders, ...this.ordersSignal()]);
+  }
+
+  private readonly paymentMethodsSignal = signal<PaymentMethod[]>(
+    this.loadPersisted<PaymentMethod>(PAYMENT_METHODS_KEY),
+  );
   readonly paymentMethods = this.paymentMethodsSignal.asReadonly();
 
   readonly preferredPaymentMethod = computed(
@@ -175,32 +147,7 @@ export class ProfileService {
     return 'Visa';
   }
 
-  private readonly addressesSignal = signal<Address[]>([
-    {
-      id: 'addr-1',
-      label: 'Home',
-      recipientName: 'John Cena',
-      line1: '000 invis st',
-      city: 'Austin',
-      state: 'TX',
-      postalCode: '78701',
-      country: 'United States',
-      phone: '(512) 555-0148',
-      isDefault: true,
-    },
-    {
-      id: 'addr-2',
-      label: 'Work',
-      recipientName: 'John Cena',
-      line1: '1 Infinite Loop',
-      line2: 'Suite 300',
-      city: 'Austin',
-      state: 'TX',
-      postalCode: '78702',
-      country: 'United States',
-      isDefault: false,
-    },
-  ]);
+  private readonly addressesSignal = signal<Address[]>(this.loadPersisted<Address>(ADDRESSES_KEY));
   readonly addresses = this.addressesSignal.asReadonly();
 
   readonly defaultAddress = computed(
@@ -261,5 +208,28 @@ export class ProfileService {
     ]);
 
     return null;
+  }
+
+  constructor() {
+    this.persistOnChange(ORDERS_KEY, this.ordersSignal);
+    this.persistOnChange(PAYMENT_METHODS_KEY, this.paymentMethodsSignal);
+    this.persistOnChange(ADDRESSES_KEY, this.addressesSignal);
+  }
+
+  private loadPersisted<T>(key: string): T[] {
+    try {
+      const raw = localStorage.getItem(key);
+      return raw ? (JSON.parse(raw) as T[]) : [];
+    } catch {
+      return [];
+    }
+  }
+
+  private persistOnChange<T>(key: string, source: () => T[]): void {
+    effect(() => {
+      try {
+        localStorage.setItem(key, JSON.stringify(source()));
+      } catch {}
+    });
   }
 }
