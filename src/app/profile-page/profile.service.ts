@@ -1,4 +1,4 @@
-import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal, untracked } from '@angular/core';
 import { AuthService } from '../features/auth/auth.service';
 
 export interface ProfileUser {
@@ -56,9 +56,11 @@ export interface NewAddressInput {
   phone?: string;
 }
 
-const ORDERS_KEY = 'shoppy-profile-orders';
-const PAYMENT_METHODS_KEY = 'shoppy-profile-payment-methods';
-const ADDRESSES_KEY = 'shoppy-profile-addresses';
+const ORDERS_KEY_BASE = 'shoppy-profile-orders';
+const PAYMENT_METHODS_KEY_BASE = 'shoppy-profile-payment-methods';
+const ADDRESSES_KEY_BASE = 'shoppy-profile-addresses';
+
+const GUEST_NAMESPACE = 'guest';
 
 @Injectable({
   providedIn: 'root',
@@ -71,16 +73,18 @@ export class ProfileService {
     return { name: authUser?.fullName ?? 'Guest' };
   });
 
-  private readonly ordersSignal = signal<Order[]>(this.loadPersisted<Order>(ORDERS_KEY));
+  private readonly namespace = computed(
+    () => this.authService.currentUser()?.email ?? GUEST_NAMESPACE,
+  );
+
+  private readonly ordersSignal = signal<Order[]>([]);
   readonly orders = this.ordersSignal.asReadonly();
 
   addOrders(newOrders: Order[]): void {
     this.ordersSignal.set([...newOrders, ...this.ordersSignal()]);
   }
 
-  private readonly paymentMethodsSignal = signal<PaymentMethod[]>(
-    this.loadPersisted<PaymentMethod>(PAYMENT_METHODS_KEY),
-  );
+  private readonly paymentMethodsSignal = signal<PaymentMethod[]>([]);
   readonly paymentMethods = this.paymentMethodsSignal.asReadonly();
 
   readonly preferredPaymentMethod = computed(
@@ -147,7 +151,7 @@ export class ProfileService {
     return 'Visa';
   }
 
-  private readonly addressesSignal = signal<Address[]>(this.loadPersisted<Address>(ADDRESSES_KEY));
+  private readonly addressesSignal = signal<Address[]>([]);
   readonly addresses = this.addressesSignal.asReadonly();
 
   readonly defaultAddress = computed(
@@ -211,9 +215,22 @@ export class ProfileService {
   }
 
   constructor() {
-    this.persistOnChange(ORDERS_KEY, this.ordersSignal);
-    this.persistOnChange(PAYMENT_METHODS_KEY, this.paymentMethodsSignal);
-    this.persistOnChange(ADDRESSES_KEY, this.addressesSignal);
+    effect(() => {
+      const ns = this.namespace();
+      this.ordersSignal.set(this.loadPersisted<Order>(this.scopedKey(ORDERS_KEY_BASE, ns)));
+      this.paymentMethodsSignal.set(
+        this.loadPersisted<PaymentMethod>(this.scopedKey(PAYMENT_METHODS_KEY_BASE, ns)),
+      );
+      this.addressesSignal.set(this.loadPersisted<Address>(this.scopedKey(ADDRESSES_KEY_BASE, ns)));
+    });
+
+    this.persistOnChange(ORDERS_KEY_BASE, this.ordersSignal);
+    this.persistOnChange(PAYMENT_METHODS_KEY_BASE, this.paymentMethodsSignal);
+    this.persistOnChange(ADDRESSES_KEY_BASE, this.addressesSignal);
+  }
+
+  private scopedKey(base: string, namespace: string): string {
+    return `${base}:${namespace}`;
   }
 
   private loadPersisted<T>(key: string): T[] {
@@ -225,10 +242,13 @@ export class ProfileService {
     }
   }
 
-  private persistOnChange<T>(key: string, source: () => T[]): void {
+  private persistOnChange<T>(base: string, source: () => T[]): void {
     effect(() => {
+      const data = source();
+
+      const ns = untracked(() => this.namespace());
       try {
-        localStorage.setItem(key, JSON.stringify(source()));
+        localStorage.setItem(this.scopedKey(base, ns), JSON.stringify(data));
       } catch {}
     });
   }
