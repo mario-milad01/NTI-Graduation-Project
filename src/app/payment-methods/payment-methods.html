@@ -1,0 +1,87 @@
+<div class="payment-methods-page">
+  <div class="page-header">
+    <h1>Payment Methods</h1>
+    <p class="subtitle">Manage the cards saved to your account.</p>
+  </div>
+
+  <div class="methods-list">
+    @for (method of methods(); track method.id) {
+      <div class="method-card">
+        <div class="method-info">
+          <div class="brand-badge">{{ method.brand }}</div>
+          <div>
+            <p class="card-number">•••• •••• •••• {{ method.last4 }}</p>
+            <p class="card-meta">
+              {{ method.cardholderName }} · Expires {{ method.expiryMonth }}/{{ method.expiryYear }}
+            </p>
+          </div>
+        </div>
+        <div class="method-actions">
+          @if (method.isDefault) {
+            <span class="default-pill">Default</span>
+          } @else {
+            <button class="link-btn" (click)="setDefault(method.id)">Set as default</button>
+          }
+          <button class="link-btn remove" (click)="removeMethod(method.id)">Remove</button>
+        </div>
+      </div>
+    } @empty {
+      <p class="empty-state">You don't have any payment methods saved yet.</p>
+    }
+  </div>
+
+  @if (!showAddForm) {
+    <button class="add-btn" (click)="toggleAddForm()">+ Add payment method</button>
+  } @else {
+    <form class="add-form" (ngSubmit)="addPaymentMethod()">
+      <h3>Add a card</h3>
+
+      @if (errorMessage) {
+        <p class="form-error">{{ errorMessage }}</p>
+      }
+
+      <label>
+        Cardholder name
+        <input
+          type="text"
+          name="cardholderName"
+          [(ngModel)]="newCardholderName"
+          placeholder="Alex Rivera"
+        />
+      </label>
+
+      <label>
+        Card number
+        <input
+          type="text"
+          name="cardNumber"
+          [(ngModel)]="newCardNumber"
+          placeholder="1234 5678 9012 3456"
+          inputmode="numeric"
+        />
+      </label>
+
+      <div class="form-row">
+        <label>
+          Expiry (MM/YY)
+          <input type="text" name="expiry" [(ngModel)]="newExpiry" placeholder="08/27" />
+        </label>
+        <label>
+          CVV
+          <input
+            type="text"
+            name="cvv"
+            [(ngModel)]="newCvv"
+            placeholder="123"
+            inputmode="numeric"
+          />
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="cancel-btn" (click)="toggleAddForm()">Cancel</button>
+        <button type="submit" class="save-btn">Save card</button>
+      </div>
+    </form>
+  }
+</div>

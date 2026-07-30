@@ -25,9 +25,13 @@
         </li>
       </ul>
       <div class="user-auth-action-btn">
-        <button class="navbar-btn login">Login</button>
-        <button class="navbar-btn signup">Signup</button>
-        <button class="navbar-btn logout">Logout</button>
+        @if (isLoggedIn()) {
+          <span class="user-greeting">Hi, {{ currentUser()?.fullName }}</span>
+          <button class="navbar-btn logout" type="button" (click)="logout()">Logout</button>
+        } @else {
+          <a class="navbar-btn login" routerLink="/login">Login</a>
+          <a class="navbar-btn signup" routerLink="/signup">Signup</a>
+        }
       </div>
     </nav>
   </div>

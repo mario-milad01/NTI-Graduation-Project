@@ -1,0 +1,424 @@
+<div class="luxe-page">
+  <!-- Stepper -->
+  <div class="stepper-wrap">
+    <div class="stepper">
+      <div class="step-item">
+        <div class="step-dot active">1</div>
+        <span class="step-label-active">Shipping</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-dot inactive">2</div>
+        <span class="step-label">Payment</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step-item">
+        <div class="step-dot inactive">3</div>
+        <span class="step-label">Review</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <main class="checkout-main">
+    @if (cartItems().length === 0) {
+      <!-- Empty cart state -->
+      <div class="luxe-card empty-checkout">
+        <h2 class="section-title">Your cart is empty</h2>
+        <p class="empty-text">Add items to your cart before checking out.</p>
+        <a routerLink="/home" class="empty-cta">Continue shopping</a>
+      </div>
+    } @else {
+      <div class="checkout-grid">
+        <!-- Left: form -->
+        <div class="checkout-forms">
+          <!-- Contact info -->
+          <section class="luxe-card" [formGroup]="contactForm">
+            <h2 class="section-title section-title-mb">Contact Information</h2>
+            <label class="field-label">Email Address</label>
+            <input
+              type="email"
+              formControlName="email"
+              placeholder="you@example.com"
+              class="luxe-input input-full input-mt"
+              [class.input-error]="
+                contactForm.controls.email.invalid && contactForm.controls.email.touched
+              "
+            />
+            <label class="check-row">
+              <input type="checkbox" formControlName="updates" class="check-input" />
+              Keep me updated on news and exclusive offers
+            </label>
+          </section>
+
+          <!-- Shipping address -->
+          <section class="luxe-card" [formGroup]="shippingForm">
+            <h2 class="section-title section-title-mb">Shipping Address</h2>
+            <div class="grid-2">
+              <div>
+                <label class="field-label">First Name</label>
+                <input
+                  type="text"
+                  formControlName="firstName"
+                  class="luxe-input input-full input-mt"
+                />
+              </div>
+              <div>
+                <label class="field-label">Last Name</label>
+                <input
+                  type="text"
+                  formControlName="lastName"
+                  class="luxe-input input-full input-mt"
+                />
+              </div>
+              <div class="col-span-2">
+                <label class="field-label">Street Address</label>
+                <input
+                  type="text"
+                  formControlName="streetAddress"
+                  class="luxe-input input-full input-mt"
+                />
+              </div>
+              <div>
+                <label class="field-label">City</label>
+                <input type="text" formControlName="city" class="luxe-input input-full input-mt" />
+              </div>
+              <div>
+                <label class="field-label">Postal Code</label>
+                <input
+                  type="text"
+                  formControlName="postalCode"
+                  class="luxe-input input-full input-mt"
+                />
+              </div>
+            </div>
+          </section>
+
+          <!-- Delivery method -->
+          <section class="luxe-card">
+            <h2 class="section-title section-title-mb">Delivery Method</h2>
+            <div class="stack-3">
+              <label
+                class="radio-card radio-card-row"
+                [class.selected]="deliveryMethod() === 'standard'"
+                (click)="selectDeliveryMethod('standard')"
+              >
+                <div class="radio-inner">
+                  <input
+                    type="radio"
+                    name="delivery"
+                    [checked]="deliveryMethod() === 'standard'"
+                    class="radio-input"
+                  />
+                  <div>
+                    <p class="option-title">Standard Shipping</p>
+                    <p class="option-sub">3-5 Business Days</p>
+                  </div>
+                </div>
+                <span class="price-free">Free</span>
+              </label>
+              <label
+                class="radio-card radio-card-row"
+                [class.selected]="deliveryMethod() === 'priority'"
+                (click)="selectDeliveryMethod('priority')"
+              >
+                <div class="radio-inner">
+                  <input
+                    type="radio"
+                    name="delivery"
+                    [checked]="deliveryMethod() === 'priority'"
+                    class="radio-input"
+                  />
+                  <div>
+                    <p class="option-title">Priority Express</p>
+                    <p class="option-sub">Next Day Delivery</p>
+                  </div>
+                </div>
+                <span class="option-title">$25.00</span>
+              </label>
+            </div>
+          </section>
+
+          <!-- Payment -->
+          <section class="luxe-card">
+            <h2 class="section-title section-title-mb">Payment</h2>
+
+            @if (savedMethods().length > 0) {
+              <div class="stack-3 saved-methods">
+                @for (method of savedMethods(); track method.id) {
+                  <label
+                    class="radio-card radio-card-row"
+                    [class.selected]="isSavedMethodSelected(method.id)"
+                    (click)="selectSavedMethod(method.id)"
+                  >
+                    <div class="radio-inner">
+                      <input
+                        type="radio"
+                        name="payment"
+                        class="radio-input"
+                        [checked]="isSavedMethodSelected(method.id)"
+                      />
+                      <div>
+                        <p class="option-title">
+                          {{ method.brand | uppercase }} •••• {{ method.last4 }}
+                        </p>
+                        <p class="option-sub">
+                          Expires {{ method.expiryMonth }}/{{ method.expiryYear }}
+                        </p>
+                      </div>
+                    </div>
+                    @if (method.isDefault) {
+                      <span class="default-pill">Default</span>
+                    }
+                  </label>
+                }
+              </div>
+              <p class="new-card-heading">Or pay with a new card</p>
+            }
+
+            <label
+              class="radio-card radio-card-block"
+              [class.selected]="paymentSelection() === 'card'"
+              (click)="selectCardPayment()"
+            >
+              <div class="section-head">
+                <div class="radio-inner">
+                  <input
+                    type="radio"
+                    name="payment"
+                    [checked]="paymentSelection() === 'card'"
+                    class="radio-input"
+                  />
+                  <p class="option-title">Credit Card</p>
+                </div>
+                <div class="card-icons">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon-sm"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.8"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"
+                    />
+                  </svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon-sm"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.8"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+                    />
+                  </svg>
+                </div>
+              </div>
+
+              <div class="stack-3" [formGroup]="cardForm" (click)="$event.stopPropagation()">
+                <div>
+                  <label class="field-label">Card Number</label>
+                  <div class="input-wrap">
+                    <input
+                      type="text"
+                      placeholder="0000 0000 0000 0000"
+                      inputmode="numeric"
+                      maxlength="19"
+                      formControlName="cardNumber"
+                      (input)="onCardNumberInput($event)"
+                      class="luxe-input input-full input-lg-pr"
+                    />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="icon-sm input-icon"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.8"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <div class="grid-2">
+                  <div>
+                    <label class="field-label">Expiration</label>
+                    <input
+                      type="text"
+                      placeholder="MM/YY"
+                      maxlength="5"
+                      formControlName="expiry"
+                      (input)="onExpiryInput($event)"
+                      class="luxe-input input-full input-mt"
+                    />
+                  </div>
+                  <div>
+                    <label class="field-label">CVV</label>
+                    <input
+                      type="text"
+                      placeholder="123"
+                      maxlength="4"
+                      inputmode="numeric"
+                      formControlName="cvv"
+                      (input)="onCvvInput($event)"
+                      class="luxe-input input-full input-mt"
+                    />
+                  </div>
+                </div>
+                <label class="check-row">
+                  <input
+                    type="checkbox"
+                    class="check-input"
+                    [checked]="saveCard()"
+                    (change)="onSaveCardChange($event)"
+                  />
+                  Save this card for next time
+                </label>
+              </div>
+            </label>
+          </section>
+        </div>
+
+        <!-- Right: order summary -->
+        <aside class="summary-col">
+          <div class="luxe-card summary-card">
+            <h2 class="section-title section-title-mb">Order Summary</h2>
+
+            <div class="stack-4">
+              @for (item of summaryItems(); track $index) {
+                <div class="summary-item">
+                  <img [src]="item.imageUrl" [alt]="item.name" class="summary-thumb" />
+                  <div class="summary-item-info">
+                    <div>
+                      <p class="item-name">{{ item.name }}</p>
+                      <p class="item-variant">{{ item.variant }}</p>
+                    </div>
+                    <p class="item-name">{{ item.price | currency }}</p>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div class="totals">
+              <div class="totals-row">
+                <span>Subtotal</span>
+                <span class="totals-value">{{ subtotal() | currency }}</span>
+              </div>
+              <div class="totals-row">
+                <span>Shipping</span>
+                <span class="totals-value">
+                  {{ shippingCost() === 0 ? 'Free' : (shippingCost() | currency) }}
+                </span>
+              </div>
+              <div class="totals-row">
+                <span>Taxes</span>
+                <span class="totals-value">{{ taxes() | currency }}</span>
+              </div>
+            </div>
+
+            <div class="grand-row">
+              <span class="grand-label">Total</span>
+              <span class="grand-value">{{ orderTotal() | currency }}</span>
+            </div>
+
+            <button
+              (click)="completePurchase()"
+              [disabled]="isSubmitting()"
+              class="luxe-btn-primary complete-btn"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="icon-sm"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+                />
+              </svg>
+              {{ isSubmitting() ? 'Processing…' : 'Complete Purchase' }}
+            </button>
+
+            <div class="badges">
+              <div class="badge">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon-sm"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.8"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286z"
+                  />
+                </svg>
+                <span class="badge-text">SSL SECURE</span>
+              </div>
+              <div class="badge">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon-sm"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.8"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 0h-12"
+                  />
+                </svg>
+                <span class="badge-text">TRACKABLE</span>
+              </div>
+              <div class="badge">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="icon-sm"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.8"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+                <span class="badge-text">30-DAY RETURN</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    }
+  </main>
+
+  <!-- Footer -->
+  <footer class="checkout-footer">
+    <div class="footer-inner">
+      <p class="footer-logo">Shoppy</p>
+      <p class="footer-copy">© 2026 Shoppy. All rights reserved.</p>
+    </div>
+  </footer>
+</div>

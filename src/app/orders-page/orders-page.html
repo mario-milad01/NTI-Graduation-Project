@@ -1,0 +1,41 @@
+<div class="orders-page">
+  <div class="page-header">
+    <h1>Your Orders</h1>
+    <p class="subtitle">Every order placed on your account, most recent first.</p>
+  </div>
+
+  @if (orders().length) {
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Order ID</th>
+          <th>Status</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders(); track $index) {
+          <tr>
+            <td class="product-cell">
+              <div class="thumb"></div>
+              <div>
+                <p class="product-name">{{ order.product }}</p>
+                <p class="product-variant">{{ order.variant }}</p>
+              </div>
+            </td>
+            <td>{{ order.orderId }}</td>
+            <td>
+              <span class="status-pill" [class.transit]="order.status === 'In Transit'">
+                {{ order.status }}
+              </span>
+            </td>
+            <td>{{ order.total }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  } @else {
+    <p class="empty-state">You haven't placed any orders yet.</p>
+  }
+</div>

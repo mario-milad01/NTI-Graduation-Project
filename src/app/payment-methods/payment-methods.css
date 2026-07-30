@@ -1,0 +1,145 @@
+.page-header {
+  margin-bottom: 24px;
+}
+.page-header h1 {
+  margin: 0;
+  font-size: 26px;
+}
+.subtitle {
+  color: #6b7280;
+  margin-top: 4px;
+}
+.methods-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.method-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.method-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.brand-badge {
+  background: #111827;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+  min-width: 76px;
+  text-align: center;
+}
+.card-number {
+  font-weight: 600;
+  font-size: 14px;
+}
+.card-meta {
+  color: #6b7280;
+  font-size: 12px;
+  margin-top: 2px;
+}
+.method-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.default-pill {
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.link-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 13px;
+  cursor: pointer;
+  padding: 0;
+}
+.link-btn.remove {
+  color: #dc2626;
+}
+.empty-state {
+  color: #6b7280;
+  font-size: 14px;
+}
+.add-btn {
+  border: 1px dashed #d1d5db;
+  background: #fff;
+  color: #2563eb;
+  padding: 12px;
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+.add-form {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.add-form h3 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+}
+.add-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  color: #374151;
+}
+.add-form input {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.form-error {
+  color: #dc2626;
+  font-size: 13px;
+  margin: 0;
+}
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+.cancel-btn {
+  background: none;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.save-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  cursor: pointer;
+}

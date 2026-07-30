@@ -1,0 +1,40 @@
+<div class="orders-card">
+  <div class="orders-header">
+    <h3>Recent Orders</h3>
+  </div>
+
+  <table class="orders-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Order ID</th>
+        <th>Status</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (order of orders; track $index) {
+        <tr>
+          <td class="product-cell">
+            <div class="thumb"></div>
+            <div>
+              <p class="product-name">{{ order.product }}</p>
+              <p class="product-variant">{{ order.variant }}</p>
+            </div>
+          </td>
+          <td>{{ order.orderId }}</td>
+          <td>
+            <span class="status-pill" [class.transit]="order.status === 'In Transit'">
+              {{ order.status }}
+            </span>
+          </td>
+          <td>{{ order.total }}</td>
+        </tr>
+      } @empty {
+        <tr>
+          <td colspan="4" class="empty-cell">You haven't placed any orders yet.</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

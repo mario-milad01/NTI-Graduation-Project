@@ -1,0 +1,25 @@
+<aside class="sidebar">
+  <div class="profile">
+    <div class="avatar"></div>
+    <div>
+      <p class="name">{{ user().name }}</p>
+    </div>
+  </div>
+
+  <nav class="nav-list">
+    @for (item of navItems; track item.label) {
+      <a
+        class="nav-item"
+        [routerLink]="item.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: item.route === '/profile' }"
+      >
+        <span class="icon">{{ item.icon }}</span>
+        <span class="label">{{ item.label }}</span>
+        @if (item.badge) {
+          <span class="badge">{{ item.badge }}</span>
+        }
+      </a>
+    }
+  </nav>
+</aside>

@@ -1,0 +1,11 @@
+.profile-page-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f8fafc;
+  font-family: system-ui, sans-serif;
+  padding-top: 5rem;
+}
+.main-content {
+  flex: 1;
+  padding: 32px;
+}

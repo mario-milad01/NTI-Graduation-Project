@@ -1,0 +1,71 @@
+.page-header {
+  margin-bottom: 24px;
+}
+.page-header h1 {
+  margin: 0;
+  font-size: 26px;
+}
+.subtitle {
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.orders-table th {
+  text-align: left;
+  font-size: 12px;
+  color: #6b7280;
+  padding: 12px 16px;
+  background: #f1f5f9;
+}
+.orders-table td {
+  padding: 14px 16px;
+  border-top: 1px solid #f1f5f9;
+  font-size: 14px;
+}
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.thumb {
+  width: 40px;
+  height: 40px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.product-name {
+  font-weight: 600;
+}
+.product-variant {
+  color: #6b7280;
+  font-size: 12px;
+}
+.status-pill {
+  background: #dcfce7;
+  color: #16a34a;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.status-pill.transit {
+  background: #dbeafe;
+  color: #2563eb;
+}
+.empty-state {
+  color: #6b7280;
+  font-size: 14px;
+  background: #fff;
+  border: 1px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}

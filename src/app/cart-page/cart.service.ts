@@ -74,6 +74,10 @@ export class CartService {
     this.itemsSignal.set(this.itemsSignal().filter((item) => item.key !== itemKey));
   }
 
+  clear(): void {
+    this.itemsSignal.set([]);
+  }
+
   get subtotal(): number {
     return this.itemsSignal().reduce((sum, item) => sum + item.price * item.quantity, 0);
   }
