@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Product } from '../../data/products';
 
 export interface CartItem {
@@ -16,6 +17,7 @@ export interface CartItem {
   providedIn: 'root',
 })
 export class CartService {
+  private readonly snackBar = inject(MatSnackBar);
   private readonly itemsSignal = signal<CartItem[]>([]);
   readonly items = this.itemsSignal.asReadonly();
 
@@ -36,22 +38,36 @@ export class CartService {
           item.key === existingItem.key ? { ...item, quantity: item.quantity + quantity } : item,
         ),
       );
-      return;
+    } else {
+      this.itemsSignal.set([
+        ...currentItems,
+        {
+          key: `${product.id}-${color ?? 'default'}-${size ?? 'default'}`,
+          id: product.id,
+          name: product.name,
+          price: product.price,
+          quantity,
+          image: product.imageUrl,
+          color,
+          size,
+        },
+      ]);
     }
 
-    this.itemsSignal.set([
-      ...currentItems,
+    // Prepare details string for color/size if present
+    const details = [color, size].filter(Boolean).join(' / ');
+    const detailString = details ? ` (${details})` : '';
+
+    // Trigger SnackBar with item data
+    this.snackBar.open(
+      `Added ${quantity}x "${product.name}"${detailString} to your cart!`,
+      'Close',
       {
-        key: `${product.id}-${color ?? 'default'}-${size ?? 'default'}`,
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        quantity,
-        image: product.imageUrl,
-        color,
-        size,
-      },
-    ]);
+        duration: 3500,
+        horizontalPosition: 'right',
+        verticalPosition: 'bottom',
+      }
+    );
   }
 
   increaseQuantity(itemKey: string): void {
@@ -71,7 +87,16 @@ export class CartService {
   }
 
   removeItem(itemKey: string): void {
+    const itemToRemove = this.itemsSignal().find((item) => item.key === itemKey);
     this.itemsSignal.set(this.itemsSignal().filter((item) => item.key !== itemKey));
+
+    if (itemToRemove) {
+      this.snackBar.open(`Removed "${itemToRemove.name}" from your cart`, 'Close', {
+        duration: 3500,
+        horizontalPosition: 'right',
+        verticalPosition: 'bottom',
+      });
+    }
   }
 
   clear(): void {
@@ -79,14 +104,15 @@ export class CartService {
   }
 
   get subtotal(): number {
-    return this.itemsSignal().reduce((sum, item) => sum + item.price * item.quantity, 0);
-  }
+const rawSubtotal = this.itemsSignal().reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return Number(rawSubtotal.toFixed(2)); 
+ }
 
   get shipping(): number {
     return this.itemsSignal().length > 0 ? 5 : 0;
   }
 
   get total(): number {
-    return this.subtotal + this.shipping;
+    return Number((this.subtotal + this.shipping).toFixed(2));
   }
 }

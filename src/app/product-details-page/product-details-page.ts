@@ -49,6 +49,7 @@ export class ProductDetailsPage implements OnInit {
 
   addToCart(): void {
     this.cartService.addItem(this.product, this.quantity, this.selectedColor, this.selectedSize);
-    alert(`Added ${this.quantity}x ${this.product.name} to your cart`);
+    
+    // alert(`Added ${this.quantity}x ${this.product.name} to your cart`);
   }
 }

@@ -1,10 +1,12 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Navbar } from './navbar/navbar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar],
+  standalone: true, // Required when using imports
+  imports: [RouterOutlet, Navbar, MatSnackBarModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
